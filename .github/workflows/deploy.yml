@@ -48,8 +48,8 @@ jobs:
           echo "⏳ Aguardando healthchecks..."
           sleep 20
 
-          BACKEND_HEALTH=$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}healthy{{end}}' costelata-backend)
-          FRONTEND_HEALTH=$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}healthy{{end}}' costelata-frontend)
+          BACKEND_HEALTH=$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}healthy{{end}}' app-backend)
+          FRONTEND_HEALTH=$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}healthy{{end}}' app-frontend)
 
           if [ "$BACKEND_HEALTH" != "healthy" ] || [ "$FRONTEND_HEALTH" != "healthy" ]; then
             echo "❌ Healthcheck falhou! Restaurando containers anteriores..."
