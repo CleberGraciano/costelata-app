@@ -11,7 +11,9 @@ jobs:
 
     steps:
     - name: Checkout código
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # pega todo o histórico, não apenas o último commit
 
     - name: Enviar código para VPS
       uses: appleboy/scp-action@master
