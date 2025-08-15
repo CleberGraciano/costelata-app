@@ -12,8 +12,6 @@ jobs:
     steps:
     - name: Checkout código
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0 # pega todo o histórico, não apenas o último commit
 
     - name: Enviar código para VPS
       uses: appleboy/scp-action@master
@@ -24,13 +22,42 @@ jobs:
         source: "api/*,ui/*"
         target: "/var/www/costelata/"
 
-    - name: Conectar na VPS e atualizar containers
+    - name: Deploy e rollback na VPS
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_KEY }}
         script: |
+          set -e
           cd /var/www/costelata
-          docker compose up -d --build
+
+          echo "📦 Salvando imagens atuais..."
+          docker save costelata-backend > backend_prev.tar || true
+          docker save costelata-frontend > frontend_prev.tar || true
+
+          echo "🔨 Buildando novos containers..."
+          if ! docker compose up -d --build; then
+            echo "❌ Build falhou! Restaurando versões anteriores..."
+            [ -s backend_prev.tar ] && docker load < backend_prev.tar
+            [ -s frontend_prev.tar ] && docker load < frontend_prev.tar
+            docker compose up -d
+            exit 1
+          fi
+
+          echo "⏳ Aguardando healthchecks..."
+          sleep 20
+
+          BACKEND_HEALTH=$(docker inspect --format='{{.State.Health.Status}}' costelata-backend 2>/dev/null || echo "unhealthy")
+          FRONTEND_HEALTH=$(docker inspect --format='{{.State.Health.Status}}' costelata-frontend 2>/dev/null || echo "unhealthy")
+
+          if [ "$BACKEND_HEALTH" != "healthy" ] || [ "$FRONTEND_HEALTH" != "healthy" ]; then
+            echo "❌ Healthcheck falhou! Restaurando containers anteriores..."
+            [ -s backend_prev.tar ] && docker load < backend_prev.tar
+            [ -s frontend_prev.tar ] && docker load < frontend_prev.tar
+            docker compose up -d
+            exit 1
+          fi
+
+          echo "✅ Deploy concluído com sucesso!"
           docker image prune -f
