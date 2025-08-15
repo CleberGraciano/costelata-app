@@ -12,32 +12,15 @@ jobs:
     steps:
     - name: Checkout código
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
-    - name: Sincronizar código para VPS
-      uses: appleboy/ssh-action@master
+    - name: Enviar código para VPS
+      uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_KEY }}
-        script: |
-          set -e
-          # Cria pastas se não existirem
-          mkdir -p /var/www/costelata/api
-          mkdir -p /var/www/costelata/ui
-
-    - name: Enviar backend e frontend via rsync
-      uses: burnett01/rsync-deployments@v5
-      with:
-        switches: -avz --delete
-        path: |
-          api/
-          ui/
-        remote_path: /var/www/costelata/
-        remote_host: ${{ secrets.VPS_HOST }}
-        remote_user: ${{ secrets.VPS_USER }}
-        key: ${{ secrets.VPS_KEY }}
+        source: "api/*,ui/*"
+        target: "/var/www/costelata/"
 
     - name: Deploy e rollback na VPS
       uses: appleboy/ssh-action@master
