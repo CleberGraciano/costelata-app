@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS users (
+  id VARCHAR(36) PRIMARY KEY NOT NULL,
+  nome_fantasia TEXT,
+  email TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  cnpj TEXT UNIQUE,
+  role TEXT,
+  senha_provisoria TEXT,
+  senha_provisoria_expiracao TIMESTAMP,
+  codigo_cliente_integracao TEXT,
+  codigo_cliente_omie TEXT,
+  cidade VARCHAR(100),
+  estado VARCHAR(100),
+  telefone VARCHAR(20),
+  status ENUM('Ativo', 'Bloqueado') NOT NULL DEFAULT 'Bloqueado',
+  condicao_de_pagamento ENUM('À Vista', '7 dias', '14 dias', '28 dias') NOT NULL DEFAULT 'À Vista',
+  existe_atraso BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

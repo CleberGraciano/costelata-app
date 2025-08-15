@@ -1,0 +1,39 @@
+<div class="card p-p-4 max-w-md mx-auto mt-12">
+  <form [formGroup]="form" #formElement (ngSubmit)="login()">
+    <h2 class="text-2xl font-bold mb-6 text-center">Acessar o Costelata</h2>
+    <div class="p-field mb-4">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" pInputText formControlName="email" />
+    </div>
+    <div class="p-field mb-1">
+      <label for="password">Senha</label>
+      <div class="flex items-center relative">
+        <input
+          id="password"
+          [type]="mostrarSenha ? 'text' : 'password'"
+          pInputText
+          formControlName="password"
+          class="pr-10 flex-1"
+        />
+        <button type="button"
+          (click)="mostrarSenha = !mostrarSenha"
+          class="absolute right-2 text-gray-400 hover:text-primary-500 focus:outline-none"
+          tabindex="-1"
+          aria-label="Mostrar ou ocultar senha"
+          style="top: 50%; transform: translateY(-50%);"
+        >
+          <i class="pi" [ngClass]="mostrarSenha ? 'pi-eye-slash' : 'pi-eye'"></i>
+        </button>
+      </div>
+    </div>
+    <div class="mb-3 text-right">
+      <a routerLink="/recuperar-senha" class="text-primary-500 text-sm hover:underline">Esqueceu a senha?</a>
+    </div>
+    <button type="submit" class="w-full bg-primary-500 hover:bg-primary-700 text-white py-2 rounded mt-4 transition-colors">Entrar</button>
+    <div class="mt-4 text-center">
+      <a routerLink="/cadastro" class="text-primary-500 hover:underline">Ainda não tem conta? Cadastre-se</a>
+    </div>
+  </form>
+</div>
+
+<p-toast></p-toast>

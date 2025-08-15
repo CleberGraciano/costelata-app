@@ -1,0 +1,41 @@
+<ng-container *ngIf="title() && breadcrumbs()?.length">
+  <div class="app-header px-4 py-4 flex flex-col gap-2 sm:gap-3">
+    <nav aria-label="breadcrumb">
+      <ol class="flex gap-2 text-sm text-gray-500 flex-wrap">
+        <li *ngFor="let crumb of breadcrumbs(); let last = last">
+          <ng-container *ngIf="!last">
+            <a [routerLink]="crumb.url" class="hover:underline">{{ crumb.label }}</a>
+            <span class="mx-1 text-gray-400">/</span>
+          </ng-container>
+          <ng-container *ngIf="last">
+            <span class="font-semibold text-gray-700 capitalize">{{ crumb.label }}</span>
+          </ng-container>
+        </li>
+      </ol>
+    </nav>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex flex-col sm:flex-row sm:items-end sm:gap-1">
+        <h1 class="text-4xl font-heading text-primary-800 font-semibold uppercase leading-tight">
+          {{ title() }}
+        </h1>
+        <span class="text-base font-medium text-primary-600 tracking-wide uppercase sm:ml-2 border-l-2 border-primary-300 pl-3 mb-2">
+          {{ actionPage() }}
+        </span>
+      </div>
+      <ng-container *ngIf="actionButton() as btn">
+        <ng-container *ngIf="btn?.label && btn?.url">
+          <button
+            type="button"
+            [routerLink]="btn.url"
+            class="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-all text-sm"
+          >
+            <i class="{{ btn.icon || 'pi pi-plus' }}"></i>
+            {{ btn.label }}
+          </button>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <p-divider></p-divider>
+  </div>
+</ng-container>

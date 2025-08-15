@@ -1,0 +1,127 @@
+<div class="px-4 min-h-screen">
+  <div class="max-w-6xl mx-auto">
+    <!-- Seção de categorias -->
+    <h2 class="text-lg sm:text-base font-bold text-[#2c1403] mb-3 font-costelata uppercase tracking-[0.02em] sm:tracking-[0.03em]">
+      Categorias
+    </h2>
+
+    <section class="px-4 sm:px-2 py-4 sm:py-6 sm:bg-[#f5f2ef] mb-6 rounded-md sm:border sm:border-[#e6e1db]">
+      <div
+        class="flex gap-6 sm:gap-7 overflow-x-auto md:grid md:grid-cols-8 md:gap-6 px-1 hide-scrollbar scroll-smooth snap-x snap-mandatory">
+
+        <!-- Categoria: Todos -->
+        <div (click)="selecionarCategoria('Todos')"
+          class="flex flex-col items-center cursor-pointer text-center transition hover:scale-105 flex-shrink-0 snap-start">
+          <div [ngClass]="{
+        'bg-[#c7a67f] shadow-md': categoriaSelecionada === 'Todos',
+        'bg-white': categoriaSelecionada !== 'Todos'
+      }" class="w-16 h-16 rounded-full flex items-center justify-center transition-colors duration-300">
+            <i class="pi pi-th-large text-xl text-primary-700"></i>
+          </div>
+          <span class="text-xs mt-3 font-semibold text-[#2c1403]">Todos</span>
+        </div>
+
+        <!-- Demais categorias -->
+        <div *ngFor="let categoria of categorias" (click)="selecionarCategoria(categoria.nome)"
+          class="flex flex-col items-center cursor-pointer text-center transition hover:scale-105 flex-shrink-0 snap-start">
+          <div [ngClass]="{
+        'bg-[#c7a67f] shadow-md': categoriaSelecionada === categoria.nome,
+        'bg-white': categoriaSelecionada !== categoria.nome
+      }" class="w-16 h-16 rounded-full flex items-center justify-center transition-colors duration-300">
+            <img [src]="categoria.icone" [alt]="categoria.nome" class="w-10 h-10 object-contain" />
+          </div>
+          <span class="text-xs mt-3 font-semibold text-[#2c1403]">{{ categoria.nome }}</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Nenhum produto encontrado -->
+    <p *ngIf="produtosExibidos.length === 0" class="text-center text-sm text-gray-500 mb-6">
+      Nenhum produto encontrado nesta categoria.
+    </p>
+
+    <!-- Grid de produtos -->
+    <div *ngIf="produtosExibidos.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div *ngFor="let produto of produtosExibidos"
+        class="flex flex-col md:flex-row bg-white border border-gray-200 shadow-sm hover:shadow-md transition overflow-hidden rounded">
+
+        <!-- Imagem -->
+        <div class="relative w-full h-52 md:h-auto md:w-48">
+          <img
+            [src]="produto.imgHover ? 'https://acdn-us.mitiendanube.com/stores/004/062/203/products/8-023908f4ec97ab7ab117373916999581-1024-1024.webp' : produto.imagem"
+            alt="{{ produto.nome }}"
+            class="w-full h-full object-cover transition-all duration-300 ease-in-out hover:scale-105 hover:brightness-95"
+            (mouseenter)="produto.imgHover = true" (mouseleave)="produto.imgHover = false" />
+
+          <div *ngIf="produto.maisVendido"
+            class="absolute top-2 left-2 bg-[#f5cd79] text-[#2c1403] text-xs px-2 py-1 shadow inline-flex items-center gap-1">
+            <i class="pi pi-star-fill text-sm"></i> Mais vendido
+          </div>
+          <div *ngIf="produto.novo"
+            class="absolute top-2 left-2 bg-[#f5cd79] text-[#2c1403] text-xs px-2 py-1 shadow inline-flex items-center gap-1"
+            [ngClass]="{ 'top-10': produto.maisVendido }">
+            Novo
+          </div>
+        </div>
+
+        <!-- Conteúdo -->
+        <div class="flex-1 px-4 py-4 flex flex-col justify-between gap-3 md:gap-2">
+          <div>
+            <h3 class="text-xl md:text-2xl font-bold text-gray-900 leading-snug tracking-tight mb-1">
+              {{ produto.nome }}
+            </h3>
+            <p class="text-sm text-gray-600 mb-2 leading-relaxed">{{ produto.descricao }}</p>
+
+            <div class="text-sm text-gray-600 mb-1">
+              Preço unitário:
+              <span class="text-red-600 font-semibold">{{ produto.preco | currency:'BRL' }}</span>
+            </div>
+            <div class="text-xs text-gray-500 mb-1">
+              Total:
+              <span class="text-green-600 font-semibold">
+                {{ (produto.preco * (produto.qtdAdicionar || 1)) | currency:'BRL' }}
+              </span>
+            </div>
+
+            <div class="text-xs mt-1 flex flex-col gap-1">
+              <span *ngIf="produto.freteGratis"
+                class="inline-flex items-center gap-1 bg-green-50 text-green-600 px-2 py-1 border border-green-200 w-fit rounded">
+                🚚 Frete Grátis para todo Brasil
+              </span>
+              <span *ngIf="produto.estoque <= 5"
+                class="inline-flex items-center gap-1 bg-red-50 text-red-600 px-2 py-1 border border-red-200 w-fit rounded">
+                🔥 Apenas {{ produto.estoque }} unidades disponíveis
+              </span>
+            </div>
+          </div>
+
+          <!-- Controles -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="flex items-center justify-start gap-2">
+              <button
+                class="w-9 h-9 text-lg bg-gray-200 hover:bg-gray-300 text-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+                (click)="setQtd(produto, (produto.qtdAdicionar || 1) - 1)">
+                −
+              </button>
+              <input type="number" min="1" [(ngModel)]="produto.qtdAdicionar"
+                class="w-16 text-center border border-gray-300 text-sm py-1 rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
+                placeholder="Qtd" />
+              <button
+                class="w-9 h-9 text-lg bg-gray-200 hover:bg-gray-300 text-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+                (click)="setQtd(produto, (produto.qtdAdicionar || 1) + 1)">
+                +
+              </button>
+            </div>
+
+            <button
+              class="w-full sm:w-auto bg-primary-700 hover:bg-primary-800 text-white px-6 py-2 font-medium text-sm transition rounded focus:outline-none focus:ring-2 focus:ring-primary-400"
+              (click)="adicionarAoCarrinho(produto, produto.qtdAdicionar || 1)">
+              Adicionar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

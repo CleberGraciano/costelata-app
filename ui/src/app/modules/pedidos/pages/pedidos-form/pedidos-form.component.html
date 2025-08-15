@@ -1,0 +1,77 @@
+<div class="card p-p-3">
+  <form [formGroup]="form" #formElement (ngSubmit)="salvar(form.value)">
+    <h2 class="text-lg font-semibold mb-6">Cadastro de Pedido</h2>
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col-12 p-md-4">
+        <label for="numeroPedido">Nº Pedido</label>
+        <input id="numeroPedido" type="text" pInputText formControlName="numeroPedido" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="dataEmissao">Data de Emissão</label>
+        <input id="dataEmissao" type="date" pInputText formControlName="dataEmissao" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="cliente">Cliente</label>
+        <input id="cliente" type="text" pInputText formControlName="cliente" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="cnpjCpf">CNPJ/CPF</label>
+        <input id="cnpjCpf" type="text" pInputText formControlName="cnpjCpf" [mask]="cnpjCpfMask"
+          [dropSpecialCharacters]="true" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="telefone">Telefone</label>
+        <input id="telefone" type="text" pInputText formControlName="telefone" [mask]="telefoneMask"
+          [dropSpecialCharacters]="true" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" pInputText formControlName="email" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="valorTotal">Valor Total</label>
+        <input id="valorTotal" type="number" pInputText formControlName="valorTotal" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="status">Status</label>
+        <input id="status" type="text" pInputText formControlName="status" />
+      </div>
+      <div class="p-field p-col-12">
+        <label for="endereco">Endereço</label>
+        <input id="endereco" type="text" pInputText formControlName="endereco" />
+      </div>
+    </div>
+    <h3 class="text-lg font-bold mt-8 mb-2">Itens do Pedido</h3>
+    <div formArrayName="itens">
+      <div *ngFor="let item of itens.controls; let i = index" [formGroupName]="i" class="mb-4 border-b pb-4">
+        <div class="p-field mb-2">
+          <label for="produto-{{i}}">Produto</label>
+          <input id="produto-{{i}}" type="text" pInputText formControlName="produto" />
+        </div>
+        <div class="p-field mb-2">
+          <label for="quantidade-{{i}}">Quantidade</label>
+          <input id="quantidade-{{i}}" type="number" pInputText formControlName="quantidade" />
+        </div>
+        <div class="p-field mb-2">
+          <label for="valorUnitario-{{i}}">Valor Unitário</label>
+          <input id="valorUnitario-{{i}}" type="number" pInputText formControlName="valorUnitario" />
+        </div>
+        <button type="button" class="p-button p-button-danger p-button-sm" (click)="removerItem(i)">Remover</button>
+      </div>
+      <button type="button" class="p-button p-button-success p-button-sm mb-4" (click)="adicionarItem()">Adicionar
+        Item</button>
+    </div>
+    <div class="flex justify-end gap-2 mt-4">
+      <button type="button" (click)="voltar()"
+        class="flex items-center gap-2 border border-primary-500 text-primary-500 px-4 py-2 rounded hover:bg-primary-500 hover:text-white transition">
+        <i class="pi pi-times"></i>
+        Cancelar
+      </button>
+      <button type="submit"
+        class="flex items-center gap-2 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-600 transition">
+        <i class="pi pi-save"></i>
+        Salvar
+      </button>
+    </div>
+  </form>
+</div>

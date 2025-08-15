@@ -1,0 +1,150 @@
+<p-toast></p-toast>
+<div class="flex flex-col h-screen font-body text-base bg-gray-100">
+  <header class="bg-primary-900 text-white px-4 py-6 flex justify-between items-center shadow z-20 relative h-24">
+    <div class="flex items-center gap-3 lg:absolute lg:left-1/2 lg:-translate-x-1/2">
+      <img
+        src="https://acdn-us.mitiendanube.com/stores/004/062/203/themes/common/logo-881843335-1703182160-cf0fff7964cdea77ae871b22a6ed27301703182160.png?0"
+        alt="Costelata Logo" class="h-14" />
+    </div>
+
+    <ng-container *ngIf="(isLoggedIn$ | async)">
+      <button class="lg:hidden" (click)="toggleMenu()">
+        <i class="pi pi-bars text-2xl"></i>
+      </button>
+      <div class="hidden lg:flex items-center gap-6 ml-auto mr-6">
+        <button class="relative" (click)="abrirCarrinho()">
+          <i class="pi pi-shopping-cart text-2xl"></i>
+          <span *ngIf="carrinho.length > 0"
+            class="absolute -top-2 -right-2 bg-red-500 text-xs px-1.5 py-0.5 rounded-full">
+            {{ carrinho.length }}
+          </span>
+        </button>
+      </div>
+    </ng-container>
+  </header>
+
+  <div class="flex flex-1 overflow-hidden">
+    <ng-container *ngIf="(isLoggedIn$ | async)">
+      <aside
+        class="bg-[#3c1e1a] text-[#fdcf85] w-64 p-6 flex-col space-y-5 absolute z-10 h-full lg:relative transition-transform duration-300 ease-in-out"
+        [class.-translate-x-full]="!menuAberto && !isLargeScreen" [class.translate-x-0]="menuAberto || isLargeScreen">
+        <nav class="flex flex-col divide-y divide-[#fdcf85] uppercase font-heading text-2xl tracking-widest">
+          <ng-container *ngFor="let item of menu">
+            <ng-container *ngIf="item.children && item.children.length; else singleItem">
+              <a (click)="submenuState[item.label] = !submenuState[item.label]"
+                 class="py-4 hover:text-white flex items-center cursor-pointer select-none">
+                {{ item.label }}
+                <i [ngClass]="['pi', submenuState[item.label] ? 'pi-angle-down' : 'pi-angle-right', 'ml-2', 'text-base']"></i>
+              </a>
+              <ng-container *ngIf="submenuState[item.label]">
+                <ng-container *ngFor="let sub of item.children">
+                  <a *ngIf="!sub.logout && (!sub.requiresLogin || (isLoggedIn$ | async))"
+                     [routerLink]="sub.route" class="py-3 pl-8 text-base hover:text-white">&bull; {{ sub.label }}</a>
+                  <a *ngIf="sub.logout && (isLoggedIn$ | async)" (click)="logout()"
+                     class="py-3 pl-8 text-base text-red-400 hover:text-red-200 cursor-pointer">&bull; {{ sub.label }}</a>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <ng-template #singleItem>
+              <a *ngIf="!item.logout && (!item.requiresLogin || (isLoggedIn$ | async))"
+                 [routerLink]="item.route" class="py-4 hover:text-white">{{ item.label }}</a>
+              <a *ngIf="item.logout && (isLoggedIn$ | async)" (click)="logout()"
+                 class="py-4 text-red-400 hover:text-red-200 cursor-pointer">{{ item.label }}</a>
+            </ng-template>
+          </ng-container>
+        </nav>
+      </aside>
+    </ng-container>
+
+    <ng-container *ngIf="(isLoggedIn$ | async)">
+      <main class="w-full lg:w-auto flex-1 overflow-auto p-8">
+        <div [ngClass]="{'bg-white shadow p-4 mb-4 rounded': (isLoggedIn$ | async)}">
+          <app-cabecalho-breadcrumb></app-cabecalho-breadcrumb>
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+    </ng-container>
+
+    <ng-container *ngIf="!(isLoggedIn$ | async)">
+      <main class="w-full lg:w-auto flex-1 overflow-auto p-8">
+        <router-outlet></router-outlet>
+      </main>
+    </ng-container>
+  </div>
+
+  <div class="fixed inset-0 z-50 flex justify-end" *ngIf="mostrarCarrinho && (isLoggedIn$ | async)"
+    style="background-color: rgba(0, 0, 0, 0.4);">
+    <div class="w-full max-w-md h-full bg-[#3c1e1a] text-[#fdcf85] flex flex-col shadow-lg">
+      <div class="flex justify-between items-center border-b border-[#fdcf85] px-6 py-4">
+        <h2 class="text-lg font-semibold tracking-widest uppercase">Carrinho de Compras</h2>
+        <button (click)="fecharCarrinho()" class="text-[#fdcf85] hover:text-white text-xl">
+          <i class="pi pi-times"></i>
+        </button>
+      </div>
+
+      <div class="p-6 flex-1 overflow-y-auto">
+        <div *ngIf="carrinho.length === 0" class="border border-[#fdcf85] text-center py-4 px-2">
+          O carrinho de compras está vazio.
+        </div>
+
+        <div *ngIf="carrinho.length > 0">
+          <div *ngFor="let item of carrinho; let i = index" class="border-b border-[#fdcf85] py-4">
+            <div class="flex justify-between items-start gap-2">
+              <div class="flex-1">
+                <div class="flex justify-between items-center">
+                  <span class="font-semibold">{{ item.nome }}</span>
+                  <div class="flex items-center gap-2">
+                    <button class="bg-[#fdcf85] text-[#3c1e1a] px-2 rounded hover:bg-white"
+                      (click)="alterarQuantidade(i, -1)">
+                      -
+                    </button>
+                    <span>{{ item.quantidade }}</span>
+                    <button class="bg-[#fdcf85] text-[#3c1e1a] px-2 rounded hover:bg-white"
+                      (click)="alterarQuantidade(i, 1)">
+                      +
+                    </button>
+                    <button class="text-[#fdcf85] hover:text-red-400 mt-1" (click)="removerItem(i)">
+                      <i class="pi pi-trash text-lg"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="text-sm text-[#fdcf85] opacity-80 mt-1">
+                  Preço unitário: {{ item.preco | currency:'BRL' }}
+                </div>
+                <div class="text-sm text-white font-semibold mt-1">
+                  Total: {{ (item.preco * item.quantidade) | currency:'BRL' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 py-4 border-t border-[#fdcf85] space-y-2">
+        <div class="flex justify-between font-bold text-lg text-white">
+          <span>Total geral:</span>
+          <span>
+            {{ totalCarrinho | currency:'BRL' }}
+          </span>
+        </div>
+
+        <button class="w-full bg-[#fdcf85] text-[#3c1e1a] py-2 rounded hover:bg-white font-bold"
+          (click)="finalizarCompra()" *ngIf="carrinho.length > 0">
+          Finalizar Pedido
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-confirmDialog [style]="{ width: '40vw' }" [baseZIndex]="10000"></p-confirmDialog>
+
+<app-modal-alterar-senha
+  [display]="displayAlterarSenha"
+  [senhaProvisoria]="usuarioLogado?.senhaProvisoria || ''"
+  (fechar)="displayAlterarSenha = false"
+  (salvar)="onSalvarNovaSenha($event)">
+</app-modal-alterar-senha>
+
+<p-toast></p-toast>
+<app-loader></app-loader>

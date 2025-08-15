@@ -1,0 +1,91 @@
+<div class="card p-p-3">
+  <form [formGroup]="filtroForm" (ngSubmit)="pesquisar()">
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col-8">
+        <label for="nome">Nome</label>
+        <input id="nome" type="text" pInputText formControlName="nome" />
+      </div>
+
+      <div class="p-field p-col-12 p-md-4">
+        <label for="status">Status</label>
+        <p-dropdown id="status" formControlName="status" [options]="status" optionLabel="descricao" [showClear]="true"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-3 mt-4">
+      <button type="button" (click)="limparFiltro()"
+        class="flex items-center gap-2 border border-primary-500 text-primary-500 px-4 py-2 rounded hover:bg-primary-500 hover:text-white transition">
+        <i class="pi pi-times"></i>
+        Limpar
+      </button>
+
+      <button type="submit"
+        class="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700 transition">
+        <i class="pi pi-search"></i>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <div class="mt-12">
+    <p-table [value]="fretes" [paginator]="true" [rows]="10" [globalFilterFields]="['descricao']"
+      [rowsPerPageOptions]="[5,10,20]" [responsiveLayout]="'scroll'" [resizableColumns]="true" [sortMode]="'multiple'"
+      [loading]="carregando">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="!text-left">
+            <div class="flex items-center gap-1" pSortableColumn="nome">
+              Nome <p-sortIcon field="nome" styleClass="text-sm"></p-sortIcon>
+            </div>
+          </th>
+          <th class="!text-left">
+          <div class="flex items-center gap-1" pSortableColumn="cidade">
+              Cidade <p-sortIcon field="cidade" styleClass="text-sm"></p-sortIcon>
+            </div>
+          </th>
+
+          <th class="!text-left">
+            <div class="flex items-center gap-1" pSortableColumn="valorFrete">
+              Valor do Frete <p-sortIcon field="valorFrete" styleClass="text-sm"></p-sortIcon>
+            </div>
+          </th>
+
+          <th class="!text-left">
+            <div class="flex items-center gap-1" pSortableColumn="prazoEntregaDias">
+              Prazo de Entrega (dias) <p-sortIcon field="prazoEntregaDias" styleClass="text-sm"></p-sortIcon>
+            </div>
+          </th>
+          <th class="!text-left">Ações</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-frete>
+        <tr>
+          <td>{{ frete.nome }}</td>
+          <td>{{ frete.cidade }}</td>
+          <td>{{ frete.valorFrete | currency:'BRL' }}</td>
+          <td>{{ frete.prazoEntregaDias }}</td>
+          <td class="flex justify-start gap-2">
+            <button pButton icon="pi pi-pencil" type="button"
+              class="p-button p-button-rounded border-none text-primary-400 hover:text-primary-600"
+              pTooltip="Editar Frete" tooltipPosition="top" (click)="editar(frete)">
+            </button>
+            <button pButton [icon]="frete.status === 'Ativo' ? 'pi pi-eye' : 'pi pi-eye-slash'" type="button"
+              class="p-button p-button-rounded border-none text-primary-600 hover:text-primary-500"
+              [pTooltip]="frete.status === 'Ativo' ? 'Bloquear Frete' : 'Ativar Frete'" tooltipPosition="top"
+              (click)="alterarStatus(frete)">
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="text-center">Nenhum categoria encontrado.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-toast></p-toast>

@@ -1,0 +1,53 @@
+<p-dialog [(visible)]="display" [modal]="true" [closable]="false" header="Alterar Senha" [style]="{width: '400px'}">
+    <form [formGroup]="form" (ngSubmit)="onSalvar()">
+        <div class="p-field mb-3">
+            <label for="senhaProvisoria">Senha Provisória</label>
+            <div class="flex items-center relative">
+                <input id="senhaProvisoria" [type]="showSenhaProvisoria ? 'text' : 'password'" pInputText
+                    formControlName="senhaProvisoria" class="pr-10 flex-1" />
+                <button type="button" (click)="showSenhaProvisoria = !showSenhaProvisoria"
+                    class="absolute right-2 text-gray-400 hover:text-primary-500 focus:outline-none" tabindex="-1"
+                    aria-label="Mostrar ou ocultar senha" style="top: 50%; transform: translateY(-50%);">
+                    <i class="pi" [ngClass]="showSenhaProvisoria ? 'pi-eye-slash' : 'pi-eye'"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-field mb-3">
+            <label for="novaSenha">Nova Senha</label>
+            <div class="flex items-center relative">
+                <input id="novaSenha" [type]="showNovaSenha ? 'text' : 'password'" pInputText formControlName="novaSenha"
+                    class="pr-10 flex-1" autocomplete="off" />
+                <button type="button" (click)="showNovaSenha = !showNovaSenha"
+                    class="absolute right-2 text-gray-400 hover:text-primary-500 focus:outline-none" tabindex="-1"
+                    aria-label="Mostrar ou ocultar nova senha" style="top: 50%; transform: translateY(-50%);">
+                    <i class="pi" [ngClass]="showNovaSenha ? 'pi-eye-slash' : 'pi-eye'"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-field mb-3">
+            <label for="confirmarSenha">Confirmar Nova Senha</label>
+            <div class="flex items-center relative">
+                <input id="confirmarSenha" [type]="showConfirmarSenha ? 'text' : 'password'" pInputText
+                    formControlName="confirmarSenha" class="pr-10 flex-1" autocomplete="off" />
+                <button type="button" (click)="showConfirmarSenha = !showConfirmarSenha"
+                    class="absolute right-2 text-gray-400 hover:text-primary-500 focus:outline-none" tabindex="-1"
+                    aria-label="Mostrar ou ocultar confirmação de senha" style="top: 50%; transform: translateY(-50%);">
+                    <i class="pi" [ngClass]="showConfirmarSenha ? 'pi-eye-slash' : 'pi-eye'"></i>
+                </button>
+            </div>
+        </div>
+        <div *ngIf="erro" class="p-error mb-2">{{ erro }}</div>
+        <div class="flex justify-end gap-2 mt-8">
+            <!-- <button type="button" (click)="onFechar()"
+                class="flex items-center gap-2 border border-primary-500 text-primary-500 px-4 py-2 rounded hover:bg-primary-500 hover:text-white transition">
+                <i class="pi pi-times"></i>
+                Cancelar
+            </button> -->
+            <button type="submit"
+                class="flex items-center gap-2 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-600 transition">
+                <i class="pi pi-save"></i>
+                Salvar
+            </button>
+        </div>
+    </form>
+</p-dialog>

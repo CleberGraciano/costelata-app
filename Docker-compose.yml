@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: app-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Cos@ab12345678
+      MYSQL_DATABASE: costelata
+      MYSQL_USER: costelata
+      MYSQL_PASSWORD: Cos@ab12345678
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: app-backend
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/costelata?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Cos@ab12345678
+    ports:
+      - "8080:8080"
+    restart: always
+
+  frontend:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    container_name: app-frontend
+    ports:
+      - "80:80"
+    restart: always
+
+volumes:
+  mysql_data:

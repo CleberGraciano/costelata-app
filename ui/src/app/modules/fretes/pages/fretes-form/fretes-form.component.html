@@ -1,0 +1,64 @@
+<div class="card p-p-3">
+  <form [formGroup]="form" #formElement (ngSubmit)="salvarFrete()">
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col-12">
+        <label for="descricao">Nome</label>
+        <input id="descricao" type="text" pInputText formControlName="descricao" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="valorFrete">Valor do Frete</label>
+        <input id="valorFrete" type="text" pInputText formControlName="valorFrete" mask="separator.2" prefix="R$ " />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="estado">Estado</label>
+        <p-dropdown formControlName="estado" [options]="estados" optionLabel="descricao" placeholder="Selecione um estado">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="cidade">Cidades</label>
+        <p-dropdown formControlName="cidade" [options]="cidades" optionLabel="cNome"
+          placeholder="Selecione uma cidade">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="transportadoras">Transportadoras</label>
+        <p-dropdown formControlName="transportadoras" [options]="transportadoras" optionLabel="descricao"
+          placeholder="Selecione as transportadoras">
+        </p-dropdown>
+        <!-- <p-multiSelect formControlName="transportadoras" [options]="transportadoras" optionLabel="descricao"
+          placeholder="Selecione as transportadoras">
+        </p-multiSelect> -->
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="prazoEntregaDias">Prazo de Entrega (dias)</label>
+        <input id="prazoEntregaDias" type="number" pInputText formControlName="prazoEntregaDias" [min]="1"
+          [max]="365" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="pedidoMinimo">Pedido Mínimo</label>
+        <input id="pedidoMinimo" type="number" pInputText formControlName="pedidoMinimo" [min]="1" [max]="365" />
+      </div>
+
+      <p-divider class="w-full mb-2"></p-divider>
+
+      <div class="p-field p-col-12 flex items-center gap-2">
+        <span class="font-semibold text-gray-700 text-sm">Total Frete + Impostos:</span>
+        <span class="text-primary-700 text-sm">{{ totalFreteMaisImpostos | currency:'BRL':'symbol':'1.2-2' }}</span>
+      </div>
+    </div>
+    <div class="flex justify-end gap-2 mt-4">
+      <button type="button" (click)="voltar()"
+        class="flex items-center gap-2 border border-primary-500 text-primary-500 px-4 py-2 rounded hover:bg-primary-500 hover:text-white transition">
+        <i class="pi pi-times"></i>
+        Cancelar
+      </button>
+      <button type="submit" [disabled]="form.invalid"
+        class="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700 transition disabled:opacity-60 disabled:cursor-not-allowed">
+        <i class="pi pi-check"></i>
+        Salvar
+      </button>
+    </div>
+  </form>
+</div>
+
+<p-toast></p-toast>

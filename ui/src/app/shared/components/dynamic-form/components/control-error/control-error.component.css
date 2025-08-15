@@ -1,0 +1,19 @@
+.error-container {
+    position: absolute;
+    font-size: 12px;
+    margin-top: 11px;
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+.hide{
+   display: none;
+}
+
+.invalid-feedback{
+    display: block;
+}
+
+.invalid-tooltip{
+    display: block;
+}

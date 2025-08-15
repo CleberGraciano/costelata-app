@@ -1,0 +1,240 @@
+<div class="card p-p-3">
+  <form [formGroup]="form" #formElement (ngSubmit)="salvarProduto()">
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col-12 p-md-8">
+        <label for="descricao">Descrição</label>
+        <input id="descricao" type="text" pInputText formControlName="descricao" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="unidade">Unidade</label>
+        <p-dropdown formControlName="unidade" [options]="unidades" optionLabel="descricao"
+          placeholder="Selecione uma unidade">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="dias_garantia">Dias Garantia</label>
+        <input id="dias_garantia" type="number" pInputText formControlName="dias_garantia" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="categoria">Categoria</label>
+        <p-dropdown formControlName="categoria" [options]="categorias" optionLabel="descricao"
+          placeholder="Selecione uma categoria">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="descricao_familia">Familia</label>
+        <p-dropdown formControlName="descricao_familia" [options]="categorias" optionLabel="cDescricao"
+          placeholder="Selecione uma Familia">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="estoque_minimo">Estoque Mínimo</label>
+        <input id="estoque_minimo" type="number" pInputText formControlName="estoque_minimo" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="quantidade_estoque">Quantidade em Estoque</label>
+        <input id="quantidade_estoque" type="number" pInputText formControlName="quantidade_estoque" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="valorUnitario">Valor Unitário</label>
+        <input id="valorUnitario" type="text" pInputText formControlName="valorUnitario" mask="separator.2"
+          prefix="R$ " />
+      </div>
+      <div class="p-field p-col-12">
+        <label for="descr_detalhada">Descrição Detalhada</label>
+        <textarea id="descr_detalhada" pInputTextarea formControlName="descr_detalhada"
+          placeholder="Descreva a descrição detalhada" rows="3"></textarea>
+      </div>
+      <div class="p-field p-col-12">
+        <p-accordion>
+          <p-accordionTab header="Medidas">
+            <div class="p-fluid p-formgrid p-grid">
+              <div class="p-field p-col-12 p-md-3">
+                <label for="profundidade">Profundidade</label>
+                <input id="profundidade" type="number" pInputText formControlName="profundidade" />
+              </div>
+              <div class="p-field p-col-12 p-md-3">
+                <label for="largura">Largura</label>
+                <input id="largura" type="number" pInputText formControlName="largura" />
+              </div>
+              <div class="p-field p-col-12 p-md-3">
+                <label for="peso_bruto">Peso Bruto</label>
+                <input id="peso_bruto" type="number" pInputText formControlName="peso_bruto" />
+              </div>
+              <div class="p-field p-col-12 p-md-3">
+                <label for="peso_liq">Peso Líquido</label>
+                <input id="peso_liq" type="number" pInputText formControlName="peso_liq" />
+              </div>
+            </div>
+          </p-accordionTab>
+          <p-accordionTab header="Impostos">
+            <div class="p-fluid p-formgrid p-grid">
+              <div class="p-field p-col-12 p-md-2">
+                <label for="aliquota_icms">Alíquota ICMS</label>
+                <input id="aliquota_icms" type="number" pInputText formControlName="aliquota_icms" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="cst_icms">CST ICMS</label>
+                <input id="cst_icms" type="text" pInputText formControlName="cst_icms" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="csosn_icms">CSOSN ICMS</label>
+                <input id="csosn_icms" type="text" pInputText formControlName="csosn_icms" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="aliquota_pis">Alíquota PIS</label>
+                <input id="aliquota_pis" type="number" pInputText formControlName="aliquota_pis" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="cst_pis">CST PIS</label>
+                <input id="cst_pis" type="text" pInputText formControlName="cst_pis" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="aliquota_cofins">Alíquota COFINS</label>
+                <input id="aliquota_cofins" type="number" pInputText formControlName="aliquota_cofins" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="cst_cofins">CST COFINS</label>
+                <input id="cst_cofins" type="text" pInputText formControlName="cst_cofins" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="red_base_icms">Redução Base ICMS</label>
+                <input id="red_base_icms" type="number" pInputText formControlName="red_base_icms" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="red_base_pis">Redução Base PIS</label>
+                <input id="red_base_pis" type="number" pInputText formControlName="red_base_pis" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="red_base_cofins">Redução Base COFINS</label>
+                <input id="red_base_cofins" type="number" pInputText formControlName="red_base_cofins" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="per_icms_fcp">% ICMS FCP</label>
+                <input id="per_icms_fcp" type="number" pInputText formControlName="per_icms_fcp" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="motivo_deson_icms">Motivo Desoneração ICMS</label>
+                <input id="motivo_deson_icms" type="text" pInputText formControlName="motivo_deson_icms" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="codigo_beneficio">Código Benefício</label>
+                <input id="codigo_beneficio" type="text" pInputText formControlName="codigo_beneficio" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="ncm">NCM</label>
+                <input id="ncm" type="text" pInputText formControlName="ncm" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="cfop">CFOP</label>
+                <input id="cfop" type="text" pInputText formControlName="cfop" />
+              </div>
+              <div class="p-field p-col-12 p-md-2">
+                <label for="cest">CEST</label>
+                <input id="cest" type="text" pInputText formControlName="cest" />
+              </div>
+            </div>
+          </p-accordionTab>
+          <p-accordionTab header="Armazenamento">
+            <textarea id="armazenamento" pInputTextarea formControlName="armazenamento"
+              placeholder="Descreva o armazenamento" rows="3"></textarea>
+          </p-accordionTab>
+          <p-accordionTab header="Rendimento por Produto">
+            <textarea id="rendimento_por_produto" pInputTextarea formControlName="rendimento_por_produto"
+              placeholder="Descreva o rendimento por produto" rows="3"></textarea>
+          </p-accordionTab>
+          <p-accordionTab header="Argumentos de Venda">
+            <textarea id="argumentos_venda" pInputTextarea formControlName="argumentos_venda"
+              placeholder="Descreva os argumentos de venda" rows="3"></textarea>
+          </p-accordionTab>
+          <p-accordionTab header="Exposição PDV">
+            <textarea id="exposicao_pdv" pInputTextarea formControlName="exposicao_pdv"
+              placeholder="Descreva a exposição no PDV" rows="3"></textarea>
+          </p-accordionTab>
+          <p-accordionTab header="Explicações Etiqueta">
+            <textarea id="explicacoes_etiqueta" pInputTextarea formControlName="explicacoes_etiqueta"
+              placeholder="Descreva a explicação da etiqueta" rows="3"></textarea>
+          </p-accordionTab>
+          <p-accordionTab header="Imagens">
+            <div class="p-field p-col-12">
+              <p>Imagens</p>
+              <div formArrayName="imagens">
+                <div *ngFor="let imgCtrl of imagens.controls; let i = index" class="flex items-center gap-2 mb-2">
+                  <input type="text" pInputText [formControlName]="i" placeholder="URL da imagem" />
+                  <button type="button" (click)="imagens.removeAt(i)" *ngIf="imagens.length > 1"
+                    class="p-button p-button-danger p-button-sm">
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </div>
+                <div class="p-field p-col-12 flex justify-end">
+                  <button type="button" (click)="imagens.push(fb.control(''))"
+                    class="flex items-center gap-2 border border-primary-500 text-primary-500 px-4 py-2 rounded hover:bg-primary-500 hover:text-white transition">
+                    <i class="pi pi-plus"></i> Adicionar Imagem
+                  </button>
+                </div>
+              </div>
+            </div>
+          </p-accordionTab>
+          <p-accordionTab header="Videos">
+            <div class="p-field p-col-12">
+              <p>Videos</p>
+              <div formArrayName="videos">
+                <div *ngFor="let vidCtrl of videos.controls; let i = index" class="flex items-center gap-2 mb-2">
+                  <input type="text" pInputText [formControlName]="i" placeholder="URL do video" />
+                  <button type="button" (click)="videos.removeAt(i)" *ngIf="videos.length > 1"
+                    class="p-button p-button-danger p-button-sm">
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </div>
+                <div class="p-field p-col-12 flex justify-end">
+                  <button type="button" (click)="videos.push(fb.control(''))"
+                    class="flex items-center gap-2 border border-primary-500 text-primary-500 px-4 py-2 rounded hover:bg-primary-500 hover:text-white transition">
+                    <i class="pi pi-plus"></i> Adicionar Video
+                  </button>
+                </div>
+              </div>
+            </div>
+          </p-accordionTab>
+          <p-accordionTab header="Outros Arquivos">
+            <div class="p-field p-col-12">
+              <p>Outros Arquivos</p>
+              <div formArrayName="outrosArquivos">
+                <div *ngFor="let outroCtrl of outrosArquivos.controls; let i = index" class="flex items-center gap-2 mb-2">
+                  <input type="text" pInputText [formControlName]="i" placeholder="URL do arquivo" />
+                  <button type="button" (click)="outrosArquivos.removeAt(i)" *ngIf="outrosArquivos.length > 1"
+                    class="p-button p-button-danger p-button-sm">
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </div>
+                <div class="p-field p-col-12 flex justify-end">
+                  <button type="button" (click)="outrosArquivos.push(fb.control(''))"
+                    class="flex items-center gap-2 border border-primary-500 text-primary-500 px-4 py-2 rounded hover:bg-primary-500 hover:text-white transition">
+                    <i class="pi pi-plus"></i> Adicionar Arquivo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </p-accordionTab>
+          <p-accordionTab header="Informações Adicionais">
+            <textarea id="informacoes_adicionais" pInputTextarea formControlName="informacoes_adicionais"
+              placeholder="Descreva as informações adicionais" rows="3"></textarea>
+          </p-accordionTab>
+        </p-accordion>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button type="button" (click)="voltar()"
+        class="flex items-center gap-2 border border-primary-500 text-primary-500 px-4 py-2 rounded hover:bg-primary-500 hover:text-white transition">
+        <i class="pi pi-times"></i>
+        Cancelar
+      </button>
+
+      <button type="submit" [disabled]="form.invalid"
+        class="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700 transition disabled:opacity-60 disabled:cursor-not-allowed">
+        <i class="pi pi-check"></i>
+        Salvar
+      </button>
+    </div>
+  </form>
+</div>

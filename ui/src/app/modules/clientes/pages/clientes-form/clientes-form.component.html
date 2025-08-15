@@ -1,0 +1,99 @@
+<div class="card p-p-3">
+  <form [formGroup]="form" #formElement (ngSubmit)="salvar(form.value)">
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col-12 p-md-8">
+        <label for="nome_fantasia">Nome Fantasia</label>
+        <input id="nome_fantasia" type="text" pInputText formControlName="nome_fantasia" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="tipoDeServico">Tipo de Serviço</label>
+        <p-dropdown formControlName="tipoDeServico" [options]="tipoServicos" optionLabel="descricao"
+          placeholder="Selecione um tipo de serviço" [showClear]="true" [multiple]="true">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-12 p-md-5">
+        <label for="razao_social">Razão Social</label>
+        <input id="razao_social" type="text" pInputText formControlName="razao_social" />
+      </div>
+      <div class="p-field p-col-12 p-md-3">
+        <label for="cnpj_cpf">CNPJ</label>
+        <input id="cnpj_cpf" type="text" pInputText formControlName="cnpj_cpf" [mask]="cnpjMask"
+          [dropSpecialCharacters]="true" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="telefone">Telefone</label>
+        <input id="telefone" type="text" pInputText formControlName="telefone" [mask]="telefoneMask"
+          [dropSpecialCharacters]="true" />
+      </div>
+      <div class="p-field p-col-12 p-md-8">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" pInputText formControlName="email" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="cep">CEP</label>
+        <input id="cep" type="text" pInputText formControlName="cep" [mask]="cepMask" [dropSpecialCharacters]="true" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="estado">Estado</label>
+        <p-dropdown formControlName="estado" [options]="estados" optionLabel="descricao" optionValue="codigo"
+          placeholder="Selecione um estado" [showClear]="true">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="cidade">Cidade</label>
+        <p-dropdown formControlName="cidade" [options]="cidades" optionLabel="cNome" placeholder="Selecione uma cidade"
+          [showClear]="true">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="bairro">Bairro</label>
+        <input id="bairro" type="text" pInputText formControlName="bairro" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="endereco">Logradouro</label>
+        <input id="endereco" type="text" pInputText formControlName="endereco" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="numero">Número</label>
+        <input id="numero" type="text" pInputText formControlName="numero" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="complemento">Complemento</label>
+        <input id="complemento" type="text" pInputText formControlName="complemento" />
+      </div>
+      <ng-container *ngxPermissionsOnly="['ADMIN']">
+        <div class="p-field p-col-12">
+          <label for="condicaoDePagamento">Condição de Pagamento</label>
+          <p-dropdown formControlName="condicaoDePagamento" [options]="condicoesPagamento" optionLabel="descricao"
+            placeholder="Selecione uma condição de pagamento">
+          </p-dropdown>
+        </div>
+      </ng-container>
+    </div>
+
+    <p-divider class="w-full"></p-divider>
+
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col-12 p-md-6 mt-4">
+        <ng-container *ngxPermissionsOnly="['USER']">
+          <p-message severity="warn" [text]="mensagemPrazoCompra" styleClass="mr-2"></p-message>
+        </ng-container>
+      </div>
+
+      <div class="p-field p-col-12 p-md-6 flex justify-end gap-2 mt-4">
+        <button type="button" (click)="voltar()"
+          class="flex items-center gap-2 border border-primary-500 text-primary-500 px-4 py-2 rounded hover:bg-primary-500 hover:text-white transition">
+          <i class="pi pi-times"></i>
+          Cancelar
+        </button>
+        <button type="submit"
+          class="flex items-center gap-2 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-600 transition">
+          <i class="pi pi-save"></i>
+          Salvar
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<p-toast></p-toast>

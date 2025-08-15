@@ -1,0 +1,67 @@
+<div class="px-4 py-8 bg-white text-[#2c1403] min-h-screen font-sans">
+  <div class="max-w-5xl mx-auto w-full space-y-10">
+
+    <!-- Conteúdo principal -->
+    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 lg:gap-12">
+
+      <!-- Produtos -->
+      <div class="lg:w-7/12 w-full space-y-4">
+        <h2 class="text-lg font-semibold mb-2">Produtos Selecionados</h2>
+
+        <div
+          *ngFor="let item of pedido.itens"
+          class="flex justify-between items-center border border-gray-100 rounded px-4 py-3 shadow-sm bg-white"
+        >
+          <div>
+            <p class="font-semibold text-base leading-tight">{{ item.nome }}</p>
+            <p class="text-xs text-gray-500">{{ item.quantidade }} x {{ item.preco | currency:'BRL' }}</p>
+          </div>
+          <p class="text-green-700 font-bold text-sm whitespace-nowrap">
+            {{ item.total | currency:'BRL' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Resumo do Pedido -->
+      <div class="w-full lg:w-5/12 bg-[#f9f7f5] border border-[#e5e3e0] rounded px-6 py-6 shadow-sm space-y-4">
+        <h3 class="text-lg font-bold mb-2 text-[#2c1403]">Resumo do Pedido</h3>
+
+        <div class="space-y-1 text-sm">
+          <p><span class="font-semibold">Data:</span> {{ pedido.data | date:'dd/MM/yyyy HH:mm' }}</p>
+          <p><span class="font-semibold">Código Promocional:</span> {{ pedido.cupom || '-' }}</p>
+          <p><span class="font-semibold">Valor dos Produtos:</span> {{ pedido.valorProdutos | currency:'BRL' }}</p>
+          <p><span class="font-semibold">Frete:</span> {{ pedido.valorFrete | currency:'BRL' }}</p>
+        </div>
+
+        <!-- Apenas desktop: código e barra dentro do resumo -->
+        <div class="hidden lg:block pt-4 border-t border-[#dcd3c7] space-y-2">
+          <p class="text-sm"><span class="font-semibold">Pedido:</span> <span class="font-bold text-primary-900">#{{ pedido.codigo }}</span></p>
+          <img
+            [src]="'https://barcode.tec-it.com/barcode.ashx?data=' + pedido.codigo"
+            alt="Código de Barras"
+            class="h-14"
+          />
+        </div>
+
+        <div class="pt-4 border-t border-[#dcd3c7]">
+          <p class="text-lg font-bold">
+            Total: <span class="text-green-700">{{ pedido.total | currency:'BRL' }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Apenas mobile: código e barra centralizados -->
+    <div class="lg:hidden text-center space-y-2">
+      <p class="text-sm">
+        <span class="font-semibold">Pedido:</span>
+        <span class="font-bold text-primary-900">#{{ pedido.codigo }}</span>
+      </p>
+      <img
+        [src]="'https://barcode.tec-it.com/barcode.ashx?data=' + pedido.codigo"
+        alt="Código de Barras"
+        class="h-14 mx-auto"
+      />
+    </div>
+  </div>
+</div>

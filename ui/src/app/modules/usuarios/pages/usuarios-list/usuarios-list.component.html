@@ -1,0 +1,132 @@
+<div class="card p-p-3">
+  <form [formGroup]="filtroForm" (ngSubmit)="pesquisar()">
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col-12 p-md-5">
+        <label for="nomeFantasia">Nome</label>
+        <input id="nomeFantasia" type="text" pInputText formControlName="nomeFantasia" />
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="userRole">Perfil</label>
+        <p-dropdown formControlName="userRole" [options]="perfis" optionLabel="descricao" placeholder="Selecione um perfil" [showClear]="true">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-12 p-md-3">
+        <label for="status">Status</label>
+        <p-dropdown formControlName="status" [options]="status" optionLabel="descricao" placeholder="Selecione um status" [showClear]="true">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-12 p-md-5">
+        <label for="razaoSocial">Razão Social</label>
+        <input id="razaoSocial" type="text" pInputText formControlName="razaoSocial" />
+      </div>
+      <div class="p-field p-col-12 p-md-3">
+        <label for="estado">Estado</label>
+        <p-dropdown formControlName="estado" [options]="estados" optionLabel="descricao" placeholder="Selecione um estado" [showClear]="true">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <label for="cidade">Cidade</label>
+        <p-dropdown formControlName="cidade" [options]="cidades" optionLabel="cNome" placeholder="Selecione uma cidade" [showClear]="true">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-12">
+        <label for="email">Email</label>
+        <input id="email" type="text" pInputText formControlName="email" />
+      </div>
+    </div>
+    <div class="flex justify-end gap-3 mt-4">
+      <button type="button" (click)="limparFiltro()"
+        class="flex items-center gap-2 border border-primary-500 text-primary-500 px-4 py-2 rounded hover:bg-primary-500 hover:text-white transition">
+        <i class="pi pi-times"></i>
+        Limpar
+      </button>
+
+      <button type="submit"
+        class="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700 transition">
+        <i class="pi pi-search"></i>
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  <div class="mt-12">
+    <p-table [value]="usuarios" [paginator]="true" [rows]="10" [globalFilterFields]="['nomeFantasia']"
+      [rowsPerPageOptions]="[5,10,20]" [responsiveLayout]="'scroll'" [resizableColumns]="true" [sortMode]="'multiple'"
+      [loading]="carregando">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="!text-left">
+            <div class="flex items-center gap-1" pSortableColumn="nomeFantasia">
+              Nome Fantasia <p-sortIcon field="nomeFantasia" styleClass="text-sm"></p-sortIcon>
+            </div>
+          </th>
+          <th class="!text-left">
+            <div class="flex items-center gap-1" pSortableColumn="email">
+              Email <p-sortIcon field="email" styleClass="text-sm"></p-sortIcon>
+            </div>
+          </th>
+          <th class="!text-left">
+            <div class="flex items-center gap-1" pSortableColumn="perfil">
+              Perfil <p-sortIcon field="perfil" styleClass="text-sm"></p-sortIcon>
+            </div>
+          </th>
+          <th class="!text-left">
+            <div class="flex items-center gap-1" pSortableColumn="status">
+              Status <p-sortIcon field="status" styleClass="text-sm"></p-sortIcon>
+            </div>
+          </th>
+          <th class="!text-left">Ações</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-usuario>
+        <tr>
+          <td>{{ usuario.nomeFantasia }}</td>
+          <td>{{ usuario.email }}</td>
+          <td>{{ usuario.perfil }}</td>
+          <td>{{ usuario.status }}</td>
+          <td class="flex justify-start gap-2">
+            <!-- <button pButton icon="pi pi-envelope" type="button"
+              class="p-button p-button-rounded border-none text-primary-500 hover:text-primary-700"
+              pTooltip="Reenviar senha de acesso" tooltipPosition="top" (click)="aprovarCadastro(usuario)">
+            </button> -->
+            <button pButton icon="pi pi-pencil" type="button"
+              class="p-button p-button-rounded border-none text-primary-400 hover:text-primary-600"
+              pTooltip="Editar Usuário" tooltipPosition="top" (click)="editar(usuario)">
+            </button>
+            <button pButton [icon]="usuario.status === 'Ativado' ? 'pi pi-eye' : 'pi pi-eye-slash'" type="button"
+              class="p-button p-button-rounded border-none text-primary-600 hover:text-primary-500"
+              [pTooltip]="usuario.status === 'Ativado' ? 'Bloquear Usuário' : 'Ativar Usuário'" tooltipPosition="top"
+              (click)="alterarStatus(usuario)">
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="text-center">Nenhum categoria encontrado.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog header="Cadastro Aprovado" [(visible)]="modalCadastroAprovadoVisivel" [modal]="true" [closable]="true"
+  [dismissableMask]="true" [style]="{width: '400px'}">
+  <div *ngIf="modalCadastroAprovadoUsuario" class="flex flex-col gap-2">
+    <div class="flex items-center">
+      <span class="font-semibold mr-2">Email:</span>
+      <span class="break-all">{{ modalCadastroAprovadoUsuario.email }}</span>
+    </div>
+    <div class="flex items-center">
+      <span class="font-semibold mr-2">Senha provisória:</span>
+      <span class="font-bold text-primary-500 bg-primary-50 px-2 py-1 rounded select-all">{{
+        modalCadastroAprovadoUsuario.senhaProvisoria }}</span>
+    </div>
+    <p-divider></p-divider>
+    <p class="text-xs text-gray-500 italic">Obs: Senha provisória válida por 3 dias.</p>
+  </div>
+</p-dialog>
+
+<p-toast></p-toast>
